@@ -1,0 +1,70 @@
+﻿@model Contenedores.Models.ViewModels.FileViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .responsive {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+    }
+</style>
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+
+@using (Html.BeginForm("Save", "File", FormMethod.Post,
+    new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken();
+    <div class="row">
+        <div class="col-md-6 col-lg-offset-3">
+            <div class="form-group">
+                <label> Selecciona la imagen: </label>  <br />
+
+                @Html.TextBoxFor(d => d.File, new { type = "file", @class = "form", id = "imgInp" , onchange = "loadFile(event)" })
+            <img id="output" class="responsive"/>
+                @Html.ValidationMessageFor(d => d.File, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-group">
+                <label> ¿Que tan limpio esta? </label> <br />
+                @Html.RadioButtonFor(d => d.IsClean, 0) <label> Limpio </label> <br />
+                @Html.RadioButtonFor(d => d.IsClean, 1) <label> Sucio </label>  <br />
+                @Html.RadioButtonFor(d => d.IsClean, 2) <label> Muy Sucio </label>
+                @Html.ValidationMessageFor(d => d.IsClean, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            <br />
+            <div class="form-group">
+                <label> ¿Como se encuentra el Contenedor? </label> <br />
+                @Html.RadioButtonFor(d => d.IsOpen, 0) <label> Abierto </label> <br />
+                @Html.RadioButtonFor(d => d.IsOpen, 1) <label> Cerrado </label>
+                @Html.ValidationMessageFor(d => d.IsOpen, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            <br />
+            <div class="form-group">
+                <label> ¿Esta sano o roto? </label> <br />
+                @Html.RadioButtonFor(d => d.IsBroken, 0) <label> Roto </label> <br />
+                @Html.RadioButtonFor(d => d.IsBroken, 1) <label> Sano </label>
+                @Html.ValidationMessageFor(d => d.IsBroken, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" style="text-align:center;">
+                <input type="submit" class="btn btn-success" value="Guardar" />
+            </div>
+        </div>
+    </div>
+}
+<script>
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+</script>

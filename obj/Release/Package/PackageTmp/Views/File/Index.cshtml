@@ -1,0 +1,38 @@
+﻿@model Contenedores.Models.ViewModels.FileViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert" >
+        @ViewBag.Message
+    </div>
+}
+
+@using (Html.BeginForm("Save", "File", FormMethod.Post,
+    new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken();
+<div class="row">
+    <div class="col-md-6 col-lg-offset-3">
+        <div class="form-group">
+            <label> Selecciona la imagen: </label>  <br />
+            @Html.TextBoxFor(d => d.File, new { type = "file" })
+            @Html.ValidationMessageFor(d => d.File, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <label> ¿Como se encuentra el Contenedor? </label> <br />
+            @Html.RadioButtonFor(d => d.Type, 0) <label> Limpio </label> <br />
+            @Html.RadioButtonFor(d => d.Type, 1) <label> Sucio </label>  <br />
+            @Html.RadioButtonFor(d => d.Type, 2) <label> Muy Sucio </label>
+            @Html.ValidationMessageFor(d => d.Type, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group" style="text-align:center;">
+            <input type="submit" class="btn btn-success" value="Guardar" />
+        </div>
+    </div>
+</div>
+}
+
+
